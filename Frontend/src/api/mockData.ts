@@ -1,0 +1,323 @@
+// Mock data for StockMaster IMS
+import type {
+  User,
+  Warehouse,
+  Product,
+  Receipt,
+  DeliveryOrder,
+  InternalTransfer,
+  StockAdjustment,
+  StockMovement,
+} from "@/types";
+
+// Current user (simulating logged-in state)
+export const mockUser: User = {
+  id: "user-1",
+  name: "John Doe",
+  email: "john.doe@stockmaster.com",
+  role: "manager",
+  preferredWarehouseId: "wh-1",
+  avatar: "JD",
+};
+
+// Warehouses
+export const mockWarehouses: Warehouse[] = [
+  {
+    id: "wh-1",
+    name: "Main Warehouse",
+    code: "WH-MAIN",
+    address: "123 Industrial Park, City, State 12345",
+    contactInfo: "+1-555-0101",
+    locations: [
+      { id: "loc-1", name: "Main Store", warehouseId: "wh-1" },
+      { id: "loc-2", name: "Rack A", warehouseId: "wh-1" },
+      { id: "loc-3", name: "Rack B", warehouseId: "wh-1" },
+    ],
+    isActive: true,
+    createdAt: "2024-01-15T10:00:00Z",
+  },
+  {
+    id: "wh-2",
+    name: "Distribution Center",
+    code: "WH-DC",
+    address: "456 Logistics Ave, City, State 12346",
+    contactInfo: "+1-555-0102",
+    locations: [
+      { id: "loc-4", name: "Loading Bay", warehouseId: "wh-2" },
+      { id: "loc-5", name: "Storage Area", warehouseId: "wh-2" },
+    ],
+    isActive: true,
+    createdAt: "2024-02-10T10:00:00Z",
+  },
+  {
+    id: "wh-3",
+    name: "Production Floor",
+    code: "WH-PROD",
+    address: "789 Manufacturing St, City, State 12347",
+    contactInfo: "+1-555-0103",
+    locations: [
+      { id: "loc-6", name: "Production Rack", warehouseId: "wh-3" },
+      { id: "loc-7", name: "Assembly Area", warehouseId: "wh-3" },
+    ],
+    isActive: true,
+    createdAt: "2024-03-05T10:00:00Z",
+  },
+];
+
+// Products
+export const mockProducts: Product[] = [
+  {
+    id: "prod-1",
+    name: "Widget A",
+    sku: "WGT-A-001",
+    category: "Electronics",
+    unitOfMeasure: "pieces",
+    description: "High-quality electronic widget",
+    totalStock: 150,
+    reorderLevel: 50,
+    stockByLocation: [
+      { warehouseId: "wh-1", warehouseName: "Main Warehouse", locationId: "loc-1", locationName: "Main Store", quantity: 100 },
+      { warehouseId: "wh-2", warehouseName: "Distribution Center", locationId: "loc-4", locationName: "Loading Bay", quantity: 50 },
+    ],
+    createdAt: "2024-01-20T10:00:00Z",
+    updatedAt: "2024-11-20T10:00:00Z",
+  },
+  {
+    id: "prod-2",
+    name: "Component B",
+    sku: "CMP-B-002",
+    category: "Parts",
+    unitOfMeasure: "pieces",
+    description: "Essential component for assembly",
+    totalStock: 25,
+    reorderLevel: 100,
+    stockByLocation: [
+      { warehouseId: "wh-1", warehouseName: "Main Warehouse", locationId: "loc-2", locationName: "Rack A", quantity: 25 },
+    ],
+    createdAt: "2024-02-15T10:00:00Z",
+    updatedAt: "2024-11-21T10:00:00Z",
+  },
+  {
+    id: "prod-3",
+    name: "Material C",
+    sku: "MAT-C-003",
+    category: "Raw Materials",
+    unitOfMeasure: "kg",
+    description: "Raw material for production",
+    totalStock: 500,
+    reorderLevel: 200,
+    stockByLocation: [
+      { warehouseId: "wh-3", warehouseName: "Production Floor", locationId: "loc-6", locationName: "Production Rack", quantity: 500 },
+    ],
+    createdAt: "2024-03-10T10:00:00Z",
+    updatedAt: "2024-11-19T10:00:00Z",
+  },
+  {
+    id: "prod-4",
+    name: "Tool D",
+    sku: "TOL-D-004",
+    category: "Tools",
+    unitOfMeasure: "pieces",
+    description: "Precision tool",
+    totalStock: 0,
+    reorderLevel: 10,
+    stockByLocation: [],
+    createdAt: "2024-04-05T10:00:00Z",
+    updatedAt: "2024-11-18T10:00:00Z",
+  },
+  {
+    id: "prod-5",
+    name: "Assembly E",
+    sku: "ASM-E-005",
+    category: "Finished Goods",
+    unitOfMeasure: "pieces",
+    description: "Finished assembly product",
+    totalStock: 75,
+    reorderLevel: 30,
+    stockByLocation: [
+      { warehouseId: "wh-2", warehouseName: "Distribution Center", locationId: "loc-5", locationName: "Storage Area", quantity: 75 },
+    ],
+    createdAt: "2024-05-01T10:00:00Z",
+    updatedAt: "2024-11-22T10:00:00Z",
+  },
+];
+
+// Receipts
+export const mockReceipts: Receipt[] = [
+  {
+    id: "rec-1",
+    referenceNo: "REC-2024-001",
+    supplierName: "Tech Supplies Inc.",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    date: "2024-11-20T10:00:00Z",
+    status: "done",
+    lines: [
+      { id: "line-1", productId: "prod-1", productName: "Widget A", productSku: "WGT-A-001", quantity: 50, unitOfMeasure: "pieces", unitPrice: 25.00 },
+    ],
+    notes: "Regular monthly order",
+    createdAt: "2024-11-20T09:00:00Z",
+    updatedAt: "2024-11-20T11:00:00Z",
+  },
+  {
+    id: "rec-2",
+    referenceNo: "REC-2024-002",
+    supplierName: "Parts Supplier Ltd.",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    date: "2024-11-22T10:00:00Z",
+    status: "waiting",
+    lines: [
+      { id: "line-2", productId: "prod-2", productName: "Component B", productSku: "CMP-B-002", quantity: 200, unitOfMeasure: "pieces", unitPrice: 15.00 },
+    ],
+    notes: "Urgent restock",
+    createdAt: "2024-11-22T08:00:00Z",
+    updatedAt: "2024-11-22T08:00:00Z",
+  },
+];
+
+// Delivery Orders
+export const mockDeliveryOrders: DeliveryOrder[] = [
+  {
+    id: "del-1",
+    referenceNo: "DEL-2024-001",
+    customerName: "ABC Manufacturing",
+    warehouseId: "wh-2",
+    warehouseName: "Distribution Center",
+    date: "2024-11-21T10:00:00Z",
+    status: "done",
+    lines: [
+      { id: "line-3", productId: "prod-5", productName: "Assembly E", productSku: "ASM-E-005", quantity: 25, unitOfMeasure: "pieces" },
+    ],
+    notes: "Customer pickup",
+    createdAt: "2024-11-21T08:00:00Z",
+    updatedAt: "2024-11-21T12:00:00Z",
+  },
+  {
+    id: "del-2",
+    referenceNo: "DEL-2024-002",
+    customerName: "XYZ Corp",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    date: "2024-11-22T14:00:00Z",
+    status: "ready",
+    lines: [
+      { id: "line-4", productId: "prod-1", productName: "Widget A", productSku: "WGT-A-001", quantity: 30, unitOfMeasure: "pieces" },
+    ],
+    notes: "Ship via express",
+    createdAt: "2024-11-22T09:00:00Z",
+    updatedAt: "2024-11-22T10:00:00Z",
+  },
+];
+
+// Internal Transfers
+export const mockInternalTransfers: InternalTransfer[] = [
+  {
+    id: "trf-1",
+    referenceNo: "TRF-2024-001",
+    fromWarehouseId: "wh-1",
+    fromWarehouseName: "Main Warehouse",
+    fromLocationId: "loc-1",
+    fromLocationName: "Main Store",
+    toWarehouseId: "wh-2",
+    toWarehouseName: "Distribution Center",
+    toLocationId: "loc-4",
+    toLocationName: "Loading Bay",
+    date: "2024-11-20T10:00:00Z",
+    status: "done",
+    lines: [
+      { id: "line-5", productId: "prod-1", productName: "Widget A", productSku: "WGT-A-001", quantity: 20, unitOfMeasure: "pieces" },
+    ],
+    notes: "Transfer for distribution",
+    createdAt: "2024-11-20T08:00:00Z",
+    updatedAt: "2024-11-20T12:00:00Z",
+  },
+];
+
+// Stock Adjustments
+export const mockStockAdjustments: StockAdjustment[] = [
+  {
+    id: "adj-1",
+    referenceNo: "ADJ-2024-001",
+    productId: "prod-2",
+    productName: "Component B",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    locationId: "loc-2",
+    locationName: "Rack A",
+    reason: "Count Correction",
+    systemQuantity: 50,
+    countedQuantity: 25,
+    difference: -25,
+    date: "2024-11-21T10:00:00Z",
+    status: "done",
+    notes: "Physical inventory count revealed discrepancy",
+    createdAt: "2024-11-21T09:00:00Z",
+    updatedAt: "2024-11-21T11:00:00Z",
+  },
+];
+
+// Stock Movements (Ledger)
+export const mockStockMovements: StockMovement[] = [
+  {
+    id: "mov-1",
+    timestamp: "2024-11-20T10:00:00Z",
+    productId: "prod-1",
+    productName: "Widget A",
+    productSku: "WGT-A-001",
+    movementType: "receipt",
+    toLocation: "Main Warehouse - Main Store",
+    quantityChange: 50,
+    referenceDocumentId: "rec-1",
+    referenceDocumentType: "Receipt",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    notes: "Regular monthly order",
+  },
+  {
+    id: "mov-2",
+    timestamp: "2024-11-20T12:00:00Z",
+    productId: "prod-1",
+    productName: "Widget A",
+    productSku: "WGT-A-001",
+    movementType: "transfer",
+    fromLocation: "Main Warehouse - Main Store",
+    toLocation: "Distribution Center - Loading Bay",
+    quantityChange: -20,
+    referenceDocumentId: "trf-1",
+    referenceDocumentType: "Transfer",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    notes: "Transfer for distribution",
+  },
+  {
+    id: "mov-3",
+    timestamp: "2024-11-21T11:00:00Z",
+    productId: "prod-2",
+    productName: "Component B",
+    productSku: "CMP-B-002",
+    movementType: "adjustment",
+    fromLocation: "Main Warehouse - Rack A",
+    quantityChange: -25,
+    referenceDocumentId: "adj-1",
+    referenceDocumentType: "Adjustment",
+    warehouseId: "wh-1",
+    warehouseName: "Main Warehouse",
+    notes: "Physical inventory count correction",
+  },
+  {
+    id: "mov-4",
+    timestamp: "2024-11-21T12:00:00Z",
+    productId: "prod-5",
+    productName: "Assembly E",
+    productSku: "ASM-E-005",
+    movementType: "delivery",
+    fromLocation: "Distribution Center - Storage Area",
+    quantityChange: -25,
+    referenceDocumentId: "del-1",
+    referenceDocumentType: "Delivery",
+    warehouseId: "wh-2",
+    warehouseName: "Distribution Center",
+    notes: "Customer pickup - ABC Manufacturing",
+  },
+];
